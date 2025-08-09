@@ -244,7 +244,9 @@ namespace MapleShark2.UI
                     shortop = true;
                 }
 
-                var segment = new ArraySegment<byte>(packet.Buffer, 2, packet.Length - (shortop ? 5 : 3));
+                var segment = new ArraySegment<byte>(packet.Buffer, shortop ? 5 : 3, packet.Length - (shortop ? 5 : 3));
+                // var segment = new ArraySegment<byte>(packet.Buffer, 2, packet.Length - (shortop ? 5 : 3));
+                
                 var maplePacket = new MaplePacket(timestamp, isOutbound, Build, opcode, segment);
                 AddPacket(maplePacket);
 
