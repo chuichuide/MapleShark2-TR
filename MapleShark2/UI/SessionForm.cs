@@ -193,7 +193,7 @@ namespace MapleShark2.UI
                 while (packetStream.TryRead(out byte[] packet))
                 {
                     // Results result = ProcessPacket_MS2(packet, isOutbound, pArrivalTime);
-                    Results result = ProcessPacket_TR(packet, isOutbound, pArrivalTime);
+                    Results result = ProcessPacket_TR(packet, !isOutbound, pArrivalTime);
                     switch (result)
                     {
                         case Results.Continue:
@@ -236,16 +236,16 @@ namespace MapleShark2.UI
 
                 packet.ReadShort(); //size
 
-                var shortop = false;
+                var shortopBool = false;
                 ushort opcode = packet.ReadByte();
                 if (opcode >= 0xFF)
                 {
                     opcode = (ushort)packet.ReadShort();
-                    shortop = true;
+                    shortopBool = true;
                 }
 
-                var segment = new ArraySegment<byte>(packet.Buffer, shortop ? 5 : 3, packet.Length - (shortop ? 5 : 3));
-                // var segment = new ArraySegment<byte>(packet.Buffer, 2, packet.Length - (shortop ? 5 : 3));
+                var offset = shortopBool ? 5 : 3;
+                var segment = new ArraySegment<byte>(packet.Buffer, offset, packet.Length - offset);
                 
                 var maplePacket = new MaplePacket(timestamp, isOutbound, Build, opcode, segment);
                 AddPacket(maplePacket);

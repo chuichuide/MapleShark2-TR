@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Maple2.PacketLib.Tools {
     // Converts a stream of bytes into individual packets
     public class MapleStream {
-        private const int DEFAULT_SIZE = 4096;
+        private const int DEFAULT_SIZE = 8192;
         private const int HEADER_SIZE = 2;
 
         private byte[] buffer = new byte[DEFAULT_SIZE];
@@ -34,14 +34,15 @@ namespace Maple2.PacketLib.Tools {
                 return false;
             }
 
-/*            int packetSize = BitConverter.ToInt32(buffer, 2);
-            int bufferSize = HEADER_SIZE + packetSize;
+            // int packetSize = BitConverter.ToInt32(buffer, 2);
+            // int bufferSize = HEADER_SIZE + packetSize;
+            int bufferSize = BitConverter.ToInt16(buffer, 0);
             if (cursor < bufferSize) {
                 packet = null;
                 return false;
-            }*/
+            }
 
-            int bufferSize = cursor;
+            // int bufferSize = cursor;
 
             packet = new byte[bufferSize];
             Buffer.BlockCopy(buffer, 0, packet, 0, bufferSize);
